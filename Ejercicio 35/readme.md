@@ -6,7 +6,7 @@ en forma directa, en una pila de memoria dinámica. Imprimir en pantalla y carga
 de organización secuencial, los registros ingresados por el usuario si la persona tiene una edad mayor a 21 años.
 
 ## Codigo
-```
+```c
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
