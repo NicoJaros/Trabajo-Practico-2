@@ -6,6 +6,7 @@ ordenada alfabéticamente. Una vez creada la lista guardarla en un archivo de or
 "contactos_ordenados.dat" imprimiendola en pantalla.
 
 ## Codigo
+```
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -144,3 +145,4 @@ char Menu (){
 	printf("\nPresione 3 para salir ");
 	return getchar ();
 }
+```
