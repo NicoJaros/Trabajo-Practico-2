@@ -6,7 +6,7 @@ recorrerla y recomponer la señal completa. Las muetras deberán ir de 127 a -12
 para los valores negativos y en 0 para los valores positivos. Imprimir en pantalla los valores.
 
 ## Codigo
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
