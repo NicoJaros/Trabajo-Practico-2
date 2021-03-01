@@ -13,7 +13,7 @@ Se pide cargar la lista de repuestos solicitados por los técnicos. Tener en cue
 la misma parte, y en esos casos se debe incrementar la cantidad pedida en la lista.
 
 ## Codigo
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
