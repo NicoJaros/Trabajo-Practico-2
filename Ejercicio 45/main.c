@@ -3,12 +3,6 @@
 #include <string.h>
 #include <malloc.h>
 
-/*La lista creada en el ejercicio 44 es procesada por el depósito. Para dicha tarea se pide hacer un programa que:
-
-Descuente las cantidades solicitadas del archivo de stock, creado en el Ejercicio 41.
-Hacer una cola con los repuestos en los que no se encontró stock suficiente para poder notificar a los clientes la demora de la reparación.
-*/
-
 typedef struct{
    long numeroDeOrden;
    char cliente[40];
@@ -23,10 +17,22 @@ struct lista_t {
 	struct lista_t *lazo;
 };
 
-struct extraccion {
+struct extraccion_t {
     repuestos_t dato;
     int cantidad;
-    struct extraccion *lazo;
+    struct extraccion_t *lazo;
+};
+
+typedef struct {
+   long partNumber;
+   long serialNumber;
+   char descripcion[40];
+   char ubicacion[100];
+}repuestos_ejer41;
+
+struct deposito_t {
+	long partNumber;
+	struct deposito_t *lazo;
 };
 
 char Menu (void);
@@ -35,13 +41,15 @@ int at0i (char ascii); // conversion ASCII a int
 
 int main (){
 
-	FILE *reg;
-	struct lista_t *primero = NULL, *ultimo = NULL, *aux, *recorrido, *pila = NULL, *paux;
-	struct extraccion *prim_ext = NULL, *ult_ext = NULL, *aux_ext, *recor_ext;
+	FILE *reg, *fp, *fpn;;
+	struct lista_t *primero = NULL, *ultimo = NULL, *aux, *recorrido, *pila = NULL, *paux; // Lista y pila ejercicio 43
+	struct extraccion_t *prim_ext = NULL, *ult_ext = NULL, *aux_ext, *recor_ext; // Lista de extraccion (Ejercicio 44)
+	struct deposito_t *prim_dep = NULL, *ult_dep = NULL, *aux_dep;
 	repuestos_t orden;
+	repuestos_ejer41 rep;
 	long temp, temp_r;
 	char opc;
-	int FlagModelo = 1;
+	int FlagModelo = 1, stock, i = 0;
 
 
 	do{
@@ -152,7 +160,7 @@ int main (){
 				        }
 				   // Solicitud por una unidad
 				        if ( FlagModelo ){
-				            aux_ext = (struct extraccion*) malloc (sizeof  (struct extraccion) );
+				            aux_ext = (struct extraccion_t*) malloc (sizeof  (struct extraccion_t) );
 				            if ( aux_ext ){
 				            	aux_ext->dato = paux->dato; // Carga de los datos en la orden de extraccion
 				                aux_ext->cantidad = 1;
@@ -195,6 +203,79 @@ int main (){
 				        }
 				    paux = paux->lazo;
 				}
+
+		//       ************    COMIENZO DEL EJERCICIO 45         ***********
+				// Recorremos la lista de extraccion
+				aux_ext = prim_ext;
+				    while ( aux_ext ){
+
+				        //Convertimos a long, la variable "modelo" (5 digitos)
+				        long modelo = at0i (aux_ext->dato.modelo[4])*10000 +
+				                      at0i (aux_ext->dato.modelo[3])*1000 +
+				                      at0i (aux_ext->dato.modelo[2])*100 +
+				                      at0i (aux_ext->dato.modelo[1])*10 +
+				                      at0i (aux_ext->dato.modelo[0]);
+
+				        stock = aux_ext->cantidad;
+
+				        fp = fopen("Stock.dat","rb");
+				        if ( fp == NULL ){
+				        	printf ("\n\n***No se pudo abrir el archivo***\n");
+				        	system ("pause");
+				        	break;
+				        }
+
+				        fread (&rep, sizeof (repuestos_ejer41), 1, fp );
+				        while ( !feof (fp) ){
+				              if (rep.partNumber == modelo && i < stock) // Cantidad de partes necesarias
+				                  i++;
+				              else {
+				                  fpn = fopen ("Stockn.dat","ab");
+				                  fwrite (&rep, sizeof (repuestos_ejer41), 1, fpn); // Guardamos en un nuevo archivo los registros que no coincidan
+				                  fclose (fpn);
+				              }
+				              fread (&rep, sizeof (repuestos_ejer41), 1, fp);
+				         }
+				        fclose(fp);
+				    // Si no hay el sotck suficiente de la parte necesaria, se ingresara a la cola
+
+				        if ( i != stock ){
+				            aux_dep = (struct deposito_t *) malloc ( sizeof (struct deposito_t) );
+				            if ( aux_dep ){
+				            	aux_dep->partNumber = modelo; // Copiado de dato
+
+				                if(prim_dep == NULL ){ // Primer elemento
+				                    prim_dep = aux_dep;
+				                    ult_dep = aux_dep;
+				                }
+				                else {
+				                    ult_dep->lazo = aux_dep;
+				                    ult_dep = aux_dep;
+				                }
+				                ult_dep->lazo = NULL;
+				            } else {
+				                printf("\n\nNo hay suficiente memoria***\n");
+				                system ("pause");
+				                break;
+				            }
+				        }
+				  // Actualizacion del archivo Stock con las cantidades ajustadas
+				        if (remove ("Stock.dat") ) //  Elimino archivo original
+							printf ("\n\n***No se puede eliminar el archivo original***\n");
+
+				      	if (rename ("Stockn.dat", "Stock.dat") ) // Renombro el archivo
+				      		printf ("\n\n***Error al renombrar el archivo nuevo\n");
+
+				      	fpn = fopen ("Stockn.dat", "wb"); // Creo el archivo de stock nuevo para el copiado de datos
+				      	if ( !fpn ){
+				      		printf("\n\n***Error en la creacion del nuevo archivo***\n");
+				      		system("pause");
+				      		break;
+				      	}
+				      	fclose (fpn);
+
+				   aux_ext = aux_ext->lazo;
+				   } // cerramos el primer while
 
 				break;
 
@@ -321,5 +402,7 @@ int at0i ( char ascii ){
         	caracter = 9;
         	break;
     }
+    return caracter;
+}
     return caracter;
 }
