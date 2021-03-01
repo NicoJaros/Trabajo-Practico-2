@@ -8,7 +8,7 @@ Hacer una cola con los repuestos en los que no se encontró stock suficiente par
 demora de la reparación.
 
 ## Codigo
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
