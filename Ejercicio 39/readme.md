@@ -14,7 +14,7 @@ finalizada la carga guardar los datos en un archivo de organización directa lla
 pantalla los datos.
 
 ## Codigo
-```
+```c
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
