@@ -12,7 +12,7 @@ se agregará el registro al archivo “salida.dat” de organización secuencial
 
 
 ## Codigo
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
