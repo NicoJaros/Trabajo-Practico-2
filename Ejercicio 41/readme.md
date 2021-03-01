@@ -18,7 +18,7 @@ Imprimir en pantalla la lista con cada inserción.
 El archivo se generará cuando el usuario decide no cargar mas productos.
 
 ## Codigo
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
