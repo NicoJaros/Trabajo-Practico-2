@@ -18,7 +18,7 @@ Hacer una pila con las órdenes de trabajo de forma tal que la más vieja sea la
 
 
 ## Codigo
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
