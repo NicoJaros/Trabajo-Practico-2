@@ -19,7 +19,7 @@ Realizar el main con varias llamadas a dicha función y proceder a mostrar las d
 como acceso directo, NO USAR VARIABLES GLOBALES.
 
 ## Codigo
-```
+```c
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
